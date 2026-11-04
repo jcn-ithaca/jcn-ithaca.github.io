@@ -1,0 +1,1048 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>When to Claim Social Security</title>
+<meta name="description" content="Free calculator comparing every Social Security claiming age from 62 to 70 after tax, for singles and couples.">
+<style>body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: two-pane workbench — sticky input column left, results stack right; single column on phones */
+:root {
+  --bg: #f3f5f4; --surface: #ffffff; --ink: #14201d; --muted: #56635e; --line: #dbe2df;
+  --accent: #0b6e5f; --accent-ink: #ffffff; --accent-soft: #e0efeb; --warn: #8a5a00;
+  --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a; --s4: #6250d6;
+  --seq-lo: #e6f0fc; --seq-hi: #104281;
+  --display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", sans-serif;
+  --body: "Public Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #111715; --surface: #19201e; --ink: #e8eeeb; --muted: #9caaa5; --line: #2b3431;
+  --accent: #46b8a2; --accent-ink: #08201b; --accent-soft: #173029; --warn: #e2b04a;
+  --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #9085e9;
+  --seq-lo: #1b2a3c; --seq-hi: #6da7ec; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #111715; --surface: #19201e; --ink: #e8eeeb; --muted: #9caaa5; --line: #2b3431;
+  --accent: #46b8a2; --accent-ink: #08201b; --accent-soft: #173029; --warn: #e2b04a;
+  --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #9085e9;
+  --seq-lo: #1b2a3c; --seq-hi: #6da7ec; color-scheme: dark; }
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 15px; line-height: 1.5; }
+.wrap { max-width: 1240px; margin: 0 auto; padding-block: 28px 64px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+header.top { display: grid; gap: 6px; margin-bottom: 22px; }
+h1 { font-family: var(--display); font-weight: 700; font-size: clamp(28px, 4vw, 40px); line-height: 1.08; margin: 0; letter-spacing: -0.01em; text-wrap: balance; }
+.lede { color: var(--muted); max-width: 70ch; margin: 0; }
+.grid { display: grid; grid-template-columns: 360px minmax(0, 1fr); gap: 24px; align-items: start; }
+@media (max-width: 920px) { .grid { grid-template-columns: minmax(0, 1fr); } }
+
+/* inputs */
+aside.inputs { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 12px); max-height: calc(100vh - 24px); overflow-y: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 18px; display: grid; gap: 18px; }
+@media (max-width: 920px) { aside.inputs { position: static; max-height: none; } }
+fieldset { border: 0; padding: 0; margin: 0; display: grid; gap: 10px; min-width: 0; }
+legend { font-family: var(--display); font-weight: 700; font-size: 15px; padding: 0; margin-bottom: 8px; display: flex; gap: 8px; align-items: baseline; }
+legend small { font-family: var(--body); font-weight: 400; color: var(--muted); font-size: 12px; }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; align-items: end; }
+label.f { display: grid; gap: 3px; font-size: 13px; color: var(--muted); min-width: 0; }
+label.f span.h { font-size: 11.5px; line-height: 1.35; }
+input[type=number], select { width: 100%; font: 500 15px var(--mono); color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 7px 9px; font-variant-numeric: tabular-nums; }
+input:focus-visible, select:focus-visible, button:focus-visible, .cell:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.seg { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.seg button { font: 600 13px var(--body); padding: 8px; border: 0; background: var(--bg); color: var(--muted); cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+.facts { font-size: 12px; color: var(--muted); font-family: var(--mono); margin: 0; }
+.linkbtn { font: inherit; color: var(--accent); background: none; border: 0; padding: 0; text-decoration: underline; cursor: pointer; }
+hr.soft { border: 0; border-top: 1px solid var(--line); margin: 0; }
+.btnrow { display: flex; gap: 8px; flex-wrap: wrap; }
+button.ghost { font: 500 13px var(--body); padding: 7px 12px; border: 1px solid var(--line); background: transparent; color: var(--ink); border-radius: 6px; cursor: pointer; }
+button.ghost:hover { border-color: var(--accent); }
+.example-flag { font-size: 12px; background: var(--accent-soft); color: var(--ink); padding: 8px 10px; border-radius: 6px; }
+
+/* results */
+main.results { display: grid; gap: 20px; min-width: 0; }
+section.card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 20px; min-width: 0; }
+section.card h2 { font-family: var(--display); font-weight: 700; font-size: 19px; margin: 0 0 4px; text-wrap: balance; }
+.sub { color: var(--muted); font-size: 13.5px; margin: 0 0 14px; max-width: 75ch; }
+.verdict { display: grid; gap: 14px; }
+.verdict .eyebrow { font-size: 11.5px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-weight: 600; }
+.verdict .big { font-family: var(--display); font-weight: 700; font-size: clamp(24px, 3.4vw, 34px); line-height: 1.15; margin: 0; text-wrap: balance; }
+.verdict .big em { font-style: normal; color: var(--accent); }
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; }
+.kpi { border-top: 2px solid var(--line); padding-top: 8px; }
+.kpi .v { font: 500 20px var(--mono); font-variant-numeric: tabular-nums; }
+.kpi .l { font-size: 12.5px; color: var(--muted); }
+.note { font-size: 13px; color: var(--muted); }
+main.results.stale > section:not(.verdict):not(:has(details)) { opacity: .35; pointer-events: none; }
+.warnline { font-size: 13px; color: var(--warn); }
+
+.scroll { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 13px; }
+th, td { padding: 6px 8px; text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+th { font-weight: 600; color: var(--muted); font-size: 11.5px; text-transform: uppercase; letter-spacing: .05em; border-bottom: 1px solid var(--line); }
+td { font-family: var(--mono); border-bottom: 1px solid var(--line); }
+th:first-child, td:first-child { text-align: left; }
+td.txt { font-family: var(--body); color: var(--muted); text-align: left; }
+tr.fra td { background: var(--accent-soft); }
+.yt { max-height: 440px; overflow: auto; }
+.yt thead th { position: sticky; top: 0; background: var(--surface); }
+
+/* heatmap */
+.hm { display: grid; gap: 3px; min-width: 520px; }
+.hm .axis { font: 500 12px var(--mono); color: var(--muted); display: flex; align-items: center; justify-content: center; }
+.cell { border: 0; border-radius: 4px; font: 500 11.5px var(--mono); padding: 9px 2px; cursor: pointer; font-variant-numeric: tabular-nums; position: relative; }
+.cell.best { box-shadow: 0 0 0 2px var(--surface), 0 0 0 4px var(--ink); }
+.cell.sel { outline: 3px solid var(--s2); outline-offset: -3px; }
+.hm-cap { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); margin-top: 8px; gap: 12px; flex-wrap: wrap; }
+.ramp { display: inline-block; width: 120px; height: 10px; border-radius: 3px; background: linear-gradient(90deg, var(--seq-lo), var(--seq-hi)); vertical-align: middle; margin: 0 6px; }
+
+/* bars (single) */
+.bars { display: grid; gap: 6px; }
+.bar { display: grid; grid-template-columns: 44px 1fr 92px; gap: 10px; align-items: center; cursor: pointer; background: none; border: 0; padding: 2px 0; color: var(--ink); font: inherit; text-align: left; }
+.bar .lab { font: 500 13px var(--mono); color: var(--muted); }
+.bar .track { height: 18px; position: relative; }
+.bar .fill { height: 100%; background: var(--s1); border-radius: 0 4px 4px 0; }
+.bar.best .fill { background: var(--accent); }
+.bar.sel .lab { color: var(--ink); font-weight: 600; }
+.bar .val { font: 500 13px var(--mono); text-align: right; font-variant-numeric: tabular-nums; }
+
+/* chart */
+.chart { position: relative; }
+.chart svg { width: 100%; height: auto; display: block; overflow: visible; }
+.chart text { fill: var(--muted); font: 11px var(--mono); }
+.legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 12.5px; margin-bottom: 8px; }
+.legend i { display: inline-block; width: 16px; height: 3px; border-radius: 2px; vertical-align: middle; margin-right: 6px; }
+.tip { position: absolute; pointer-events: none; background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 8px 10px; font-size: 12px; box-shadow: 0 4px 14px rgba(0,0,0,.12); min-width: 190px; z-index: 2; }
+.tip b { font-family: var(--display); }
+.tip .r { display: flex; justify-content: space-between; gap: 12px; font-family: var(--mono); }
+.tip i { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 6px; }
+.selbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: end; margin-bottom: 12px; }
+.selbar label.f { width: 130px; }
+.chat { display: grid; gap: 14px; margin-top: 8px; }
+.msg { max-width: 78ch; border-radius: 10px; padding: 12px 14px; font-size: 14px; min-width: 0; overflow-wrap: anywhere; }
+.msg.you { background: var(--accent-soft); justify-self: end; }
+.msg.claude { border: 1px solid var(--line); }
+.msg .who { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-weight: 600; margin-bottom: 4px; }
+.msg p, .msg ul, .msg ol { margin: 0 0 8px; } .msg > :last-child { margin-bottom: 0; } .msg li { margin-bottom: 4px; }
+.msg ul, .msg ol { padding-left: 20px; } .msg a { color: var(--accent); }
+details.notes summary { cursor: pointer; font-family: var(--display); font-weight: 700; font-size: 17px; }
+details.notes ul { padding-left: 18px; margin: 10px 0 0; display: grid; gap: 6px; font-size: 13.5px; color: var(--muted); max-width: 80ch; }
+details.notes b { color: var(--ink); font-weight: 600; }
+@media (prefers-reduced-motion: no-preference) { .bar .fill { transition: width .25s ease; } }
+</style>
+</head><body>
+
+<div class="wrap">
+  <header class="top">
+    <h1>When to Claim Social Security</h1>
+    <p class="lede">Compares every claiming age from 62 to 70 after federal and state income tax, using your retirement date, other income, what your savings earn, and how long you might live. All amounts are in today's dollars.</p>
+  </header>
+
+  <div class="grid">
+    <aside class="inputs" aria-label="Your situation">
+      <div class="example-flag" id="exflag">These are example numbers. Replace them with your own; your entries are remembered in this browser only.</div>
+      <div class="example-flag" id="savedflag" hidden></div>
+
+      <fieldset>
+        <legend>Household</legend>
+        <div class="seg" role="group" aria-label="Household">
+          <button type="button" id="hh-single" aria-pressed="false">Single</button>
+          <button type="button" id="hh-married" aria-pressed="true">Married</button>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>You</legend>
+        <div class="row2">
+          <label class="f">Birth year<input type="number" id="a-by" min="1950" max="1975" step="1"></label>
+          <label class="f">Benefit at full retirement age ($/mo)<input type="number" id="a-pia" min="0" step="50"></label>
+        </div>
+        <div class="row2">
+          <label class="f">Stop working at age<input type="number" id="a-retire" min="50" max="80" step="1"></label>
+          <label class="f">Earnings until then ($/yr)<input type="number" id="a-wages" min="0" step="1000"></label>
+        </div>
+        <label class="f">Life expectancy (your best guess)<input type="number" id="a-life" min="63" max="105" step="1"></label>
+        <div class="facts" id="a-facts"></div>
+      </fieldset>
+
+      <fieldset id="b-set">
+        <legend>Spouse</legend>
+        <div class="row2">
+          <label class="f">Birth year<input type="number" id="b-by" min="1950" max="1975" step="1"></label>
+          <label class="f">Benefit at full retirement age ($/mo)<input type="number" id="b-pia" min="0" step="50"></label>
+        </div>
+        <div class="row2">
+          <label class="f">Stop working at age<input type="number" id="b-retire" min="50" max="80" step="1"></label>
+          <label class="f">Earnings until then ($/yr)<input type="number" id="b-wages" min="0" step="1000"></label>
+        </div>
+        <label class="f">Life expectancy (best guess)<input type="number" id="b-life" min="63" max="105" step="1"></label>
+        <div class="facts" id="b-facts"></div>
+      </fieldset>
+
+      <hr class="soft">
+      <fieldset>
+        <legend>Other retirement income <small>per year</small></legend>
+        <div class="row2">
+          <label class="f">Pension &amp; other taxable income (not IRA)<input type="number" id="other-inc" min="0" step="1000"></label>
+          <label class="f">Retirement income starts at your age<input type="number" id="other-start" min="50" max="80" step="1"></label>
+        </div>
+        <div class="row2">
+          <label class="f">Tax-exempt interest<input type="number" id="exempt" min="0" step="500"></label>
+          <label class="f" id="surv-wrap">% of income a widow(er) still needs<input type="number" id="surv-pct" min="0" max="100" step="5"></label>
+        </div>
+      </fieldset>
+
+      <hr class="soft">
+      <fieldset>
+        <legend>Retirement accounts <small>household totals</small></legend>
+        <div class="row2">
+          <label class="f">Traditional 401(k)/IRA balance<input type="number" id="ira-bal" min="0" step="10000"></label>
+          <label class="f">Roth 401(k)/IRA balance<input type="number" id="roth-bal" min="0" step="10000"></label>
+        </div>
+        <div class="row2">
+          <label class="f">Planned withdrawals, both accounts ($/yr)<input type="number" id="ira-planned" min="0" step="1000"></label>
+          <label class="f">% of each withdrawal from Roth<input type="number" id="roth-pct" min="0" max="100" step="5"></label>
+        </div>
+        <p class="facts" id="split-note"></p>
+        <label class="f">Withdrawal approach
+          <select id="bridge"><option value="off">Same withdrawal every year (plus any required minimums)</option><option value="on">Bridge: draw extra while waiting for Social Security</option></select>
+        </label>
+        <p class="facts" id="bridge-note"></p>
+        <label class="f">Heirs' tax rate on Traditional money left over (%)<input type="number" id="heir-tax" min="0" max="50" step="1"></label>
+      </fieldset>
+
+      <hr class="soft">
+      <fieldset>
+        <legend>Trust fund shortfall</legend>
+        <div class="row2">
+          <label class="f">Across-the-board cut (%)<input type="number" id="cut-pct" min="0" max="40" step="1"></label>
+          <label class="f">Starting in year<input type="number" id="cut-year" min="2027" max="2060" step="1"></label>
+        </div>
+        <p class="facts">2026 Trustees Report: if Congress does nothing, the retirement trust fund runs out late in 2032, after which about 78% of benefits can be paid. <button type="button" class="linkbtn" id="cut-preset">Use that projection</button></p>
+      </fieldset>
+
+      <hr class="soft">
+      <fieldset>
+        <legend>Assumptions</legend>
+        <div class="row2">
+          <label class="f">Return on savings, after inflation &amp; tax (%)<input type="number" id="real-return" min="-2" max="8" step="0.25"><span class="h">0% means a dollar later is worth a dollar now.</span></label>
+          <label class="f">Inflation (%)<input type="number" id="inflation" min="0" max="8" step="0.25"><span class="h">Matters because the SS tax thresholds never rise.</span></label>
+        </div>
+        <label class="f">Lifespan
+          <select id="mode"><option value="spread">Realistic range around my guess</option><option value="exact">Exactly my guess</option></select>
+        </label>
+        <div class="row2">
+          <label class="f">State you'll live in<select id="state"><option value="AL">Alabama</option><option value="AK">Alaska</option><option value="AZ">Arizona</option><option value="AR">Arkansas</option><option value="CA">California</option><option value="CO">Colorado</option><option value="CT">Connecticut</option><option value="DE">Delaware</option><option value="DC">District of Columbia</option><option value="FL">Florida</option><option value="GA">Georgia</option><option value="HI">Hawaii</option><option value="ID">Idaho</option><option value="IL">Illinois</option><option value="IN">Indiana</option><option value="IA">Iowa</option><option value="KS">Kansas</option><option value="KY">Kentucky</option><option value="LA">Louisiana</option><option value="ME">Maine</option><option value="MD">Maryland</option><option value="MA">Massachusetts</option><option value="MI">Michigan</option><option value="MN">Minnesota</option><option value="MS">Mississippi</option><option value="MO">Missouri</option><option value="MT">Montana</option><option value="NE">Nebraska</option><option value="NV">Nevada</option><option value="NH">New Hampshire</option><option value="NJ">New Jersey</option><option value="NM">New Mexico</option><option value="NY">New York</option><option value="NC">North Carolina</option><option value="ND">North Dakota</option><option value="OH">Ohio</option><option value="OK">Oklahoma</option><option value="OR">Oregon</option><option value="PA">Pennsylvania</option><option value="RI">Rhode Island</option><option value="SC">South Carolina</option><option value="SD">South Dakota</option><option value="TN">Tennessee</option><option value="TX">Texas</option><option value="UT">Utah</option><option value="VT">Vermont</option><option value="VA">Virginia</option><option value="WA">Washington</option><option value="WV">West Virginia</option><option value="WI">Wisconsin</option><option value="WY">Wyoming</option><option value="CUSTOM">Other / custom rate</option></select></label>
+          <label class="f">State tax rate (%)<input type="number" id="state-rate" min="0" max="12" step="0.05"></label>
+        </div>
+        <p class="facts" id="state-note"></p>
+      </fieldset>
+      <div class="btnrow"><button type="button" class="ghost" id="save" hidden>Save as HTML file</button><button type="button" class="ghost" id="reset">Reset to example</button></div>
+      <p class="facts" id="save-msg" role="status"></p>
+    </aside>
+
+    <main class="results">
+      <section class="card verdict" aria-live="polite">
+        <div class="eyebrow">Best claiming plan under your assumptions</div>
+        <p class="big" id="verdict"></p>
+        <div class="kpis" id="kpis"></div>
+        <p class="note" id="flatness"></p>
+        <p class="warnline" id="warnings" hidden></p>
+      </section>
+
+      <section class="card">
+        <h2>Monthly benefit by claiming age</h2>
+        <p class="sub">Your own benefit in today's dollars, before tax. Social Security raises it with inflation each year. The shaded row is your full retirement age, rounded up to a whole year.</p>
+        <div class="scroll"><table id="benefit-table"></table></div>
+        <p class="note" id="spousal-note"></p>
+      </section>
+
+      <section class="card">
+        <h2 id="map-title">Every claiming plan compared</h2>
+        <p class="sub" id="map-sub"></p>
+        <div class="scroll" id="map"></div>
+        <div class="hm-cap" id="map-cap"></div>
+      </section>
+
+      <section class="card">
+        <h2>What if you live longer or shorter?</h2>
+        <p class="sub" id="chart-sub"></p>
+        <div class="legend" id="legend"></div>
+        <div class="chart" id="chart"></div>
+        <p class="note" id="breakeven"></p>
+      </section>
+
+      <section class="card">
+        <h2>Year by year</h2>
+        <p class="sub" id="yt-sub"></p>
+        <div class="selbar">
+          <label class="f">You claim at<select id="sel-a"></select></label>
+          <label class="f" id="sel-b-wrap">Spouse claims at<select id="sel-b"></select></label>
+        </div>
+        <div class="yt scroll"><table id="year-table"></table></div>
+      </section>
+
+      <section class="card">
+        <details class="notes">
+          <summary>How this works and what it leaves out</summary>
+          <ul>
+            <li><b>Lifetime value.</b> Each year's Social Security and IRA withdrawals minus the federal (and state) income tax they cause, plus whatever IRA is left at the last death after your heirs' tax, all discounted at your return on savings and weighted by the chance you are alive. Taking benefits early and spending them leaves your savings invested, so the same return applies whether you spend or invest the checks. Pensions and other income count toward tax brackets but are the same in every plan, so they are left out of the value.</li>
+            <li><b>IRA bridge.</b> With the bridge on, Social Security plus IRA withdrawals are held at a level amount each year (your full-age benefits plus planned withdrawals). Delaying Social Security means drawing more from the IRA in your 60s, which shrinks required minimum distributions later (starting at 73, or 75 if born in 1960 or later). Any shortfall from a benefit cut is also filled from the IRA. With the bridge off, you take the planned amount or the required minimum, whichever is larger. The IRA grows at your return on savings. State tax on IRA withdrawals is not modeled.</li>
+            <li><b>Roth vs. Traditional.</b> Each year's withdrawal is split between the accounts by the percentage you set. Roth withdrawals are tax-free and don't count toward the income that makes Social Security taxable. Required minimums apply only to the Traditional account (Roth 401(k)s no longer have them), so the Traditional withdrawal is never below the minimum. If one account runs out, the other covers the rest. Roth money left to heirs is valued tax-free; Traditional money is reduced by the heirs' tax rate.</li>
+            <li><b>Trust fund cut.</b> When set, every benefit paid from the chosen year on, including spousal and survivor benefits, is reduced by that percentage. It is a what-if; Congress has always acted before past shortfalls.</li>
+            <li><b>Tax.</b> Up to 85% of benefits become taxable once "provisional income" (other income + tax-exempt interest + half your benefits) passes $25,000 single or $32,000 married. Those thresholds are not indexed, so more of your benefit is taxed each year. Uses 2026 brackets and standard deduction indexed for inflation, the extra deduction for 65+, and the temporary $6,000 senior deduction through 2028. Other income is treated as ordinary income.</li>
+            <li><b>Earnings test.</b> If you claim before full retirement age and keep working, $1 is withheld for every $2 earned over $24,480 (2026). Withheld months are credited back as a higher benefit at full retirement age.</li>
+            <li><b>State tax.</b> Eight states still tax some benefits in 2026 (CO, CT, MN, MT, NM, RI, UT, VT); each one's exemption rules are modeled in simplified form, with the rate applied to the federally taxable portion. The pre-filled rate is a typical middle-income rate; adjust it to your bracket. Every other state, including West Virginia from 2026, exempts benefits. Thresholds and rates as published for tax year 2026.</li>
+            <li><b>Married couples.</b> Includes spousal top-ups (up to 50% of the other's full benefit, starting once both have filed) and survivor benefits (the widow(er) keeps the larger of the two checks). The survivor files as single.</li>
+            <li><b>Lifespan.</b> "Realistic range" spreads each person's age at death around the guess using a standard mortality curve, so a guess of 87 includes real chances of dying at 75 or living to 97. "Exactly" assumes the guess comes true.</li>
+            <li><b>Simplified.</b> Whole-year ages with January birthdays; no IRMAA Medicare surcharges, ACA premium subsidies, capital-gains rates, Roth conversions, or taxable brokerage accounts. Your benefit estimate should come from your statement at ssa.gov. This is an educational estimate, not financial or tax advice.</li>
+          </ul>
+        </details>
+      </section>
+      <section class="card" id="convo">
+        <details class="notes">
+          <summary>How this calculator was built</summary>
+          <p class="sub" style="margin-top:10px">The conversation that produced this calculator, kept here so anyone can see what it does and why. Behind-the-scenes research and testing steps are left out.</p>
+          <div class="chat" id="chat"></div>
+        </details>
+      </section>
+    </main>
+  </div>
+</div>
+
+<script type="application/json" id="transcript" data-keep>[{"role": "you", "text": "Social Security benefits and when to take them.  This seems really complex, the best age to start depending on the year you actually retire, taking early and investing rather than spending, your expected income every year and how that affects what portion of the SS income is taxable, and of course how long you'll actually live.  Is there an existing free and relatively easy-to-use calculator out there that allows customizing all those things?  If not, I'm interested whether you could create an HTML calculator that I can use and share with my friends that are also approaching retirement or just about to retire."}, {"role": "claude", "text": "I didn't find a free tool that handles all of this in one place, so I built one: **When to Claim Social Security**. It works for a single person or a couple.\n\n**Existing free options and what they're missing:**\n\n- **Open Social Security** (opensocialsecurity.com) is the best free one I know of. It handles couples, spousal and survivor benefits, lifespan uncertainty and a discount rate, but it doesn't model income tax on benefits.\n- **Income Solver** is free and does model taxes, but it's built around planning withdrawals and is clunky to use.\n- **The SSA's own calculators** only estimate benefits. They don't optimize when to claim or include taxes.\n- **Paid tools** like Maximize My Social Security are thorough, but they cost money.\n\n**What my calculator does:**\n\n- **Claiming ages:** it compares every age from 62 to 70, and for couples every pair of ages (you at 70 and your spouse at 65, for example).\n- **Retiring before you stop working:** if you claim before full retirement age while still earning, it applies the earnings test that withholds benefits. Withheld months are added back later as a higher benefit, as SSA does.\n- **Tax on benefits:** it works out the extra federal tax your benefits cause, plus state tax if your state taxes them. Up to 85% of benefits can be taxable, and the income thresholds for that never rise with inflation, so the tax share grows over time. It also includes the 65+ deductions, including the temporary $6,000 one through 2028.\n- **Investing vs. spending:** one \"return on savings\" setting covers both. If you spend early checks instead of drawing from savings, your savings stay invested, so it works out about the same as investing the checks.\n- **How long you live:** you enter a best guess for each person. You can treat it as exact, or let the calculator spread the odds around it on a standard mortality curve. A chart shows how each strategy does at every possible age of death.\n\nYou get a recommended plan, how much more it's worth than claiming early or at full retirement age, and how many other plans are close enough to call a tie. There's also a year-by-year table showing benefits, the taxable share, the extra tax and what you keep.\n\n**Things to know:**\n\n- **Tested, not cross-checked:** I tested the benefit reductions, the tax math, the earnings test and the survivor benefits against hand calculations. I haven't compared its results with another calculator, so treat it as an educational estimate, not tax or financial advice.\n- **Simplified:** ages are whole years, it doesn't include Medicare surcharges (IRMAA) or capital-gains rates, and it doesn't model drawing extra from an IRA while you delay. The page lists all of this.\n- **Your benefit estimates:** use the benefit at full retirement age from each person's statement at ssa.gov.\n- **Sharing:** the page is private until you share it from its Share menu. Each friend's entries are saved only in their own browser, so nobody sees anyone else's numbers.\n\nSources: [Journal of Accountancy \u2013 2027 COLA, wage base and earnings test](https://www.journalofaccountancy.com/news/2026/oct/social-security-wage-base-and-cola-announced-for-2027/) \u00b7 [Kiplinger \u2013 2027 COLA is 3.6%](https://www.kiplinger.com/retirement/social-security/2027-social-security-cola-is-3-6-percent)"}, {"role": "you", "text": "Can you add a state selector and then populate the state tax rate automatically?  Please also add an option to save as a new HTML file where the current values are the remembered defaults, so someone can save and come back to it later.  What other metrics could affect these results that aren't included?"}, {"role": "claude", "text": "I've updated the calculator with both features, and tested each one in a browser. I couldn't test the save confirmation that appears on the claude.ai page itself.\n\n**State selector.** Pick a state and the tax rate fills in, with a one-line note on that state's rules. Only eight states still tax benefits in 2026: Colorado, Connecticut, Minnesota, Montana, New Mexico, Rhode Island, Utah and Vermont. West Virginia stopped this year. Most of the eight exempt people below an income limit, and Colorado exempts everyone 65 and older. Because of that, the calculator applies each state's limits year by year instead of a flat rate. Two things to know:\n- The pre-filled rate is a typical middle-income rate I chose myself; the articles I checked didn't list rates. It's editable, so adjust it to your bracket.\n- The income limits come from two 2026 summary articles, not the states' own tax sites. They didn't fully agree on Minnesota and Montana.\n- \"Other / custom rate\" lets you enter any rate yourself.\n\n**Save as HTML file.** This button downloads a standalone copy with the current numbers built in as its defaults. The copy opens in any browser without the internet, and \"Reset\" in it goes back to the saved numbers. Each saved file keeps its own memory, so several scenarios (\"retire at 63\" vs. \"retire at 66\") won't overwrite each other. This is also the easiest way to share with friends, since the link stays private until you share it from the page's Share menu.\n\n**Factors not included, roughly in order of impact:**\n\n1. **The IRA \"bridge\" and Roth conversions.** Delaying usually means drawing more from an IRA in your 60s. That shrinks required withdrawals later and can lower lifetime taxes, which often favors delaying more than this shows. It's probably the biggest gap.\n2. **Health insurance subsidies before 65.** If you retire early on an ACA plan, Social Security income can reduce or wipe out your premium subsidy. Claiming early can cost thousands a year this way.\n3. **Medicare surcharges (IRMAA).** Higher income raises Part B and D premiums, and Social Security counts toward that income.\n4. **Capital gains and the 3.8% investment income tax.** I treat all other income as ordinary income. Benefits can push qualified dividends and capital gains out of the 0% bracket.\n5. **Trust fund shortfall.** The trust fund is projected to run short in the early-to-mid 2030s, which could mean an across-the-board cut of roughly 20% unless Congress acts. A haircut setting would let people test that.\n6. **Longevity insurance.** The calculator maximizes expected value. Delaying also protects against running out of money at 95, and an average ignores that value.\n7. **Your own health.** The lifespan spread is a population average, and couples' lifespans tend to move together.\n8. **Benefits still growing.** Working longer can raise your full-retirement-age benefit, especially if you have fewer than 35 years of earnings.\n9. **Other benefit types:** divorced-spouse benefits, benefits for dependent children, and taking a survivor benefit first while your own grows to 70.\n10. **Smaller items:** Medicare Part B premiums deducted from your check, the senior deduction ending after 2028, and future tax-law changes.\n\nI'd add the bridge strategy and the trust-fund haircut next; together they'd capture most of what's missing. Want me to add them?\n\nSources: [ssa.tools \u2013 State taxes on Social Security](https://ssa.tools/guides/state-taxes) \u00b7 [Social Security News \u2013 States that tax Social Security](https://socialsecuritynews.com/news/states-that-tax-social-security) \u00b7 [Yahoo Finance \u2013 Eight states still tax benefits in 2026](https://finance.yahoo.com/economy/policy/articles/eight-states-still-tax-social-185006707.html)"}, {"role": "you", "text": "Yes, please add those 2.  My plan is not to share the artifact but to download an HTML file and share it as an attachment in an email."}, {"role": "claude", "text": "I added both features. There's also a ready-to-email copy of the calculator, social-security-calculator.html, in the files panel for this chat, so you don't need to open the artifact to get one. I checked that it opens straight from disk and that every feature works, including the Save button.\n\n**IRA bridge.** There's a new IRA & 401(k) section with:\n- **Balance and planned withdrawals:** your household pre-tax balance and how much you plan to take out each year.\n- **Withdrawal approach:**\n  - **Same withdrawal every year:** you take your planned amount each year, or the required minimum distribution (RMD) if that's larger.\n  - **Bridge:** Social Security plus IRA withdrawals stay at a level total. While you wait to claim, the IRA covers the gap. Once benefits start, withdrawals drop, so the IRA is smaller when RMDs begin. RMDs start at 73, or 75 if you were born in 1960 or later.\n- **Heirs' tax rate:** a rate (default 24%) applied to any IRA left over at the second death.\n\nBecause the IRA is now included, the headline number is the after-tax value of Social Security plus the IRA. The year-by-year table adds IRA withdrawal and IRA balance columns. In the example couple, turning the bridge on moved the spouse's best claiming age from 66 to 69.\n\n**Trust fund cut.** You can set a percentage cut and the year it starts. It applies to every benefit, including spousal and survivor benefits. A \"Use that projection\" link fills in the 2026 Trustees Report scenario: about 78% of benefits payable once the retirement trust fund runs out in late 2032. That's a 22% cut starting in 2033. With the bridge on, the IRA covers the shortfall. In the example, the cut changed the best plan from 70/69 to 70/63: the higher earner still waits, but the lower earner claims early.\n\n**For emailing:**\n- **Your own numbers:** enter them on any copy (the artifact or the downloaded file) and click \"Save as HTML file.\" That creates a new file with those numbers built in. It opens with your scenario, and \"Reset\" returns to the saved numbers.\n- **Friends:** each person who opens an emailed copy can change the numbers and save their own version the same way.\n- **Blocked attachments:** some work email systems block .html files. If a friend doesn't get it, zip the file first.\n- **The model stays fixed:** a downloaded copy keeps the version it was saved from. If I update the calculator later, you'd need to download a fresh one.\n\nTwo simplifications are worth telling friends about. State tax on IRA withdrawals isn't modeled; only state tax on Social Security is. Roth accounts and Roth conversions aren't included either.\n\nSources: [SSA \u2013 2026 Trustees Report press release](https://www.ssa.gov/news/en/press/releases/2026-06-09.html) \u00b7 [CRS \u2013 Selected findings of the 2026 Trustees Report](https://www.everycrsreport.com/files/2026-06-25_IF13256_e1a3332f1a9ae29c3698a1f2e5a5a1d598ec6c57.html) \u00b7 [US Tax Tools \u2013 RMD age 73 vs 75 under SECURE 2.0](https://ustax.tools/tax-insights/rmd-age-73-vs-75-secure-2-timeline/)"}, {"role": "you", "text": "Please include specifying a Roth 401k amount and what percentage is withdrawn from both Roth and Traditional 401k per year all through retirement.  Please also embed this whole chat transcript into the HTML file so anyone can reference the discussion."}, {"role": "claude", "text": "Question: for the Roth 401(k), what should the yearly percentage mean?\n\n- **Split of each year's withdrawal:** you still set the yearly dollar amount, or use the bridge, and a percentage says how much of it comes from the Roth (e.g. 30% Roth / 70% Traditional). RMDs from Traditional still apply.\n- **% of each account's balance:** each account gets its own withdrawal rate, replacing the dollar amount and the bridge."}, {"role": "you", "text": "Split of each year's withdrawal."}, {"role": "claude", "text": "I added the Roth account and put our whole conversation inside the calculator. Both are in the artifact and in the email-ready file.\n\n**Roth 401(k).** The retirement-accounts section now has a Traditional balance, a Roth balance, and a \"% of each withdrawal from Roth\" setting. Each year's withdrawal (your planned amount, or the bridge amount) is split by that percentage. The rules it follows:\n\n- Roth withdrawals are tax-free, so they don't make more of your Social Security taxable.\n- Required minimum distributions still come out of the Traditional account, even when they're more than its share.\n- If one account runs dry, the other covers the rest.\n- Roth money left to heirs isn't taxed; Traditional money is taxed at the heirs' rate.\n\nThe year-by-year table now shows withdrawals and balances for each account. With no Roth balance, results are identical to the previous version.\n\n**Conversation.** A \"How this calculator was built\" section at the bottom of the page holds our conversation: your questions and my answers, without the behind-the-scenes tool work. It's carried into every file made with \"Save as HTML file\", so friends will have it too.\n\nThe updated social-security-calculator.html in the files panel replaces the earlier copy."}]</script>
+<script type="application/json" id="defaults" data-keep>{"saved":false}</script>
+<script data-keep>
+// ===== Social Security claiming engine (annual model, real "today's dollars") =====
+const SS = (() => {
+  const PARAM_YEAR = 2026;
+  // 2026 federal parameters (indexed forward by inflation)
+  const BRACKETS = {
+    single: [[12400, .10], [50400, .12], [105700, .22], [201775, .24], [256225, .32], [640600, .35], [Infinity, .37]],
+    mfj: [[24800, .10], [100800, .12], [211400, .22], [403550, .24], [512450, .32], [768700, .35], [Infinity, .37]]
+  };
+  const STD = { single: 16100, mfj: 32200 };
+  const ADD65 = { single: 2050, mfj: 1650 };
+  // Not indexed (fixed in law since 1983/1993)
+  const SS_THRESH = { single: [25000, 34000], mfj: [32000, 44000] };
+  // Temporary senior deduction 2025-2028, phase-out 6% of MAGI over threshold (not indexed)
+  const SENIOR = { amt: 6000, first: 2025, last: 2028, phase: { single: 75000, mfj: 150000 } };
+  const ET_LOWER_2026 = 24480, ET_UPPER_2026 = 65160;
+
+  function fra(by) {
+    if (by <= 1937) return 65;
+    if (by <= 1942) return 65 + (by - 1937) * 2 / 12;
+    if (by <= 1954) return 66;
+    if (by <= 1959) return 66 + (by - 1954) * 2 / 12;
+    return 67;
+  }
+  function fraLabel(f) {
+    const y = Math.floor(f + 1e-9), m = Math.round((f - y) * 12);
+    return m ? `${y} and ${m} month${m > 1 ? 's' : ''}` : `${y}`;
+  }
+  function ownFactor(age, f) {
+    const m = Math.round((age - f) * 12);
+    if (m < 0) { const e = -m; return 1 - (Math.min(e, 36) * 5 / 900 + Math.max(0, e - 36) * 5 / 1200); }
+    return 1 + Math.min(m, Math.round((70 - f) * 12)) * (2 / 3) / 100;
+  }
+  function spousalFactor(age, f) {
+    const m = Math.round((age - f) * 12);
+    if (m >= 0) return 1;
+    const e = -m; return 1 - (Math.min(e, 36) * 25 / 3600 + Math.max(0, e - 36) * 5 / 1200);
+  }
+  function survivorFactor(age, f) {
+    if (age >= f) return 1;
+    return 1 - 0.285 * Math.min(1, (f - age) / (f - 60));
+  }
+
+  function taxableSS(status, prov, ss) {
+    const [b, a] = SS_THRESH[status];
+    if (prov <= b) return 0;
+    if (prov <= a) return Math.min(0.5 * (prov - b), 0.5 * ss);
+    return Math.min(0.85 * ss, 0.85 * (prov - a) + Math.min(0.5 * ss, 0.5 * (a - b)));
+  }
+  // All inputs nominal. idx = bracket index factor for that year. Returns {tax, taxableSS}
+  function fedTax(status, ordinary, exempt, ss, n65, year, idx) {
+    const prov = ordinary + exempt + 0.5 * ss;
+    const tss = ss > 0 ? taxableSS(status, prov, ss) : 0;
+    const agi = ordinary + tss;
+    let ded = (STD[status] + n65 * ADD65[status]) * idx;
+    if (year >= SENIOR.first && year <= SENIOR.last && n65 > 0) {
+      const per = Math.max(0, SENIOR.amt - 0.06 * Math.max(0, agi - SENIOR.phase[status]));
+      ded += per * n65;
+    }
+    let ti = Math.max(0, agi - ded), tax = 0, lo = 0;
+    for (const [hi, r] of BRACKETS[status]) {
+      const top = hi * idx;
+      if (ti > lo) tax += (Math.min(ti, top) - lo) * r;
+      if (ti <= top) break;
+      lo = top;
+    }
+    return { tax, tss };
+  }
+
+
+  // ---------- state tax on Social Security (tax year 2026 rules, simplified) ----------
+  // rate = typical marginal rate for a middle-income retiree (editable in the page).
+  // Thresholds are on federal AGI (incl. taxable SS), [single, joint], nominal dollars.
+  const STATES = {
+    CO: { rate: 4.4, rule: 'Colorado: fully exempt at 65+. At 55–64, exempt if AGI is under $75k single / $95k joint, otherwise $20k per person is exempt.' },
+    CT: { rate: 5.5, rule: 'Connecticut: exempt if AGI is under $75k single / $100k joint; above that, up to 25% of benefits is taxed.' },
+    MN: { rate: 6.8, rule: 'Minnesota: exempt if AGI is under about $86k single / $111k joint (indexed), phasing out over the next $40k.' },
+    MT: { rate: 4.7, rule: 'Montana: taxes the same portion of benefits the IRS taxes.' },
+    NM: { rate: 4.9, rule: 'New Mexico: exempt if AGI is under $100k single / $150k joint.' },
+    RI: { rate: 4.75, rule: 'Rhode Island: exempt if AGI is under about $107k single / $134k joint and (through 2026) you have reached full retirement age.' },
+    UT: { rate: 4.5, rule: 'Utah: a credit wipes out the tax if income is under $54k single / $90k joint; the credit shrinks 25¢ per dollar above that.' },
+    VT: { rate: 6.6, rule: 'Vermont: exempt if AGI is under $55k single / $70k joint, phasing out by $65k / $80k.' },
+  };
+  // ctx: {state, rate(decimal), status, agi, tss, ss, ages:[...alive ages], fras:[...], year, idx}
+  function stateTaxOnSS(c) {
+    if (!c.state || c.state === 'NONE' || c.rate <= 0 || c.tss <= 0 && c.state !== 'CT') return 0;
+    const j = c.status === 'mfj' ? 1 : 0, r = c.rate;
+    const lin = (lo, hi) => c.agi <= lo ? 0 : c.agi >= hi ? 1 : (c.agi - lo) / (hi - lo);
+    switch (c.state) {
+      case 'CO': {
+        let ex = 0;
+        c.ages.forEach((a, i) => {
+          const share = c.tss / c.ages.length;
+          if (a >= 65) ex += share;
+          else if (a >= 55) ex += c.agi <= [75000, 95000][j] ? share : Math.min(share, 20000);
+        });
+        return r * Math.max(0, c.tss - ex);
+      }
+      case 'CT': return c.agi <= [75000, 100000][j] ? 0 : r * Math.min(c.tss, 0.25 * c.ss);
+      case 'MN': { const lo = [86410, 110780][j] * c.idx; return r * c.tss * lin(lo, lo + 40000 * c.idx); }
+      case 'MT': return r * c.tss;
+      case 'NM': return c.agi <= [100000, 150000][j] ? 0 : r * c.tss;
+      case 'RI': {
+        const atFra = c.year >= 2027 || c.ages.every((a, i) => a >= c.fras[i]);
+        return atFra && c.agi <= [107000, 133750][j] ? 0 : r * c.tss;
+      }
+      case 'UT': return Math.max(0, Math.min(r * c.tss, 0.25 * (c.agi - [54000, 90000][j])));
+      case 'VT': return r * c.tss * lin([55000, 70000][j], [65000, 80000][j]);
+      default: return r * c.tss; // 'CUSTOM': flat rate on the federally taxable portion
+    }
+  }
+
+  // Gompertz survival with dispersion beta; M solved so conditional expected death age = target
+  const BETA = 10.5, MAXAGE = 110;
+  function survFn(x0, M) {
+    const k = Math.exp((x0 - M) / BETA);
+    return x => x <= x0 ? 1 : (x >= MAXAGE ? 0 : Math.exp(-k * (Math.exp((x - x0) / BETA) - 1)));
+  }
+  function expectedDeath(x0, M) {
+    const S = survFn(x0, M); let e = x0;
+    for (let x = x0; x < MAXAGE; x += 0.25) e += 0.25 * (S(x) + S(x + 0.25)) / 2;
+    return e;
+  }
+  function solveM(x0, target) {
+    target = Math.min(Math.max(target, x0 + 1), MAXAGE - 2);
+    let lo = 40, hi = 130;
+    for (let i = 0; i < 50; i++) { const mid = (lo + hi) / 2; if (expectedDeath(x0, mid) < target) lo = mid; else hi = mid; }
+    return (lo + hi) / 2;
+  }
+  // death-year distribution over plan years t=0..T-1 (dies during year t => receives that year's benefits)
+  function deathDist(age0, T, mode, lifeExp) {
+    const q = new Float64Array(T);
+    if (mode === 'exact') {
+      const d = Math.round(lifeExp) - age0;
+      q[Math.min(Math.max(d, 0), T - 1)] = 1;
+    } else {
+      const S = survFn(age0, solveM(age0, lifeExp));
+      for (let t = 0; t < T; t++) q[t] = S(age0 + t) - S(age0 + t + 1);
+    }
+    const P = new Float64Array(T); let acc = 0;
+    for (let t = T - 1; t >= 0; t--) { acc += q[t]; P[t] = acc; }
+    return { q, P };
+  }
+  function survivalProb(age0, lifeExp, age) { return survFn(age0, solveM(age0, lifeExp))(age); }
+
+  // ---------- core model ----------
+  // inp: {married, year0, inflation, realReturn, stateRate, survivorIncomePct, otherIncome, otherStartAge, exempt,
+  //       A:{by, pia, retireAge, wages, lifeExp}, B:{...}, mode}
+  function setup(inp) {
+    const y0 = inp.year0, inf = inp.inflation;
+    const people = inp.married ? [inp.A, inp.B] : [inp.A];
+    const ages0 = people.map(p => y0 - p.by);
+    const T = Math.max(...ages0.map(a => MAXAGE - a + 1));
+    const realIdx = t => Math.pow(1 + inf, y0 + t - PARAM_YEAR); // inputs are 2026 dollars
+    const paramIdx = t => Math.pow(1 + inf, y0 + t - PARAM_YEAR);
+    const disc = new Float64Array(T);
+    for (let t = 0; t < T; t++) disc[t] = 1 / Math.pow(1 + inp.realReturn, t);
+    const fras = people.map(p => fra(p.by));
+    const rmdAges = people.map(p => rmdStartAge(p.by));
+    return { y0, inf, people, ages0, T, realIdx, paramIdx, disc, fras, rmdAges };
+  }
+  function minClaim(age0) { return Math.max(62, Math.min(70, age0)); }
+
+  // Per-person own benefit stream (real, annual) given claim age, incl. earnings-test withholding + FRA recompute.
+  function ownStream(S, i, c) {
+    const p = S.people[i], f = S.fras[i], a0 = S.ages0[i], T = S.T;
+    const gross = new Float64Array(T), withheld = new Float64Array(T);
+    // inputs are in 2026 dollars; limits are wage-indexed, treated as constant in real terms
+    const etL = ET_LOWER_2026, etU = ET_UPPER_2026;
+    const base = p.pia * 12 * ownFactor(c, f);
+    let wMonths = 0, effFactorAfter = ownFactor(c, f);
+    for (let t = 0; t < T; t++) {
+      const age = a0 + t;
+      if (age < c) continue;
+      const wage = age < p.retireAge ? p.wages : 0;
+      let b = base, w = 0;
+      if (age < Math.floor(f + 1e-9)) {
+        w = Math.min(b, Math.max(0, (wage - etL) / 2));
+      } else if (age < f) { // year reaching FRA, partial year before FRA
+        const frac = f - Math.floor(f + 1e-9);
+        w = Math.min(b * frac, Math.max(0, (wage - etU) / 3));
+      }
+      if (w > 0) wMonths += w / (base / 12);
+      gross[t] = b; withheld[t] = w;
+    }
+    if (wMonths > 0) {
+      const newAge = Math.min(Math.max(f, c), c + wMonths / 12);
+      effFactorAfter = ownFactor(newAge, f);
+      for (let t = 0; t < T; t++) if (S.ages0[i] + t >= f && gross[t] > 0) gross[t] = p.pia * 12 * effFactorAfter;
+    }
+    return { gross, withheld, factorAfter: effFactorAfter, wMonths };
+  }
+
+  function otherIncome(S, inp, t, aliveA, aliveB) {
+    // real values; returns {ordinary, exempt}
+    let ord = 0;
+    const ageA = S.ages0[0] + t;
+    if (aliveA && ageA < inp.A.retireAge) ord += inp.A.wages;
+    if (inp.married && aliveB && S.ages0[1] + t < inp.B.retireAge) ord += inp.B.wages;
+    let other = ageA >= inp.otherStartAge ? inp.otherIncome : 0, ex = inp.exempt;
+    if (inp.married && !(aliveA && aliveB)) { other *= inp.survivorIncomePct; ex *= inp.survivorIncomePct; }
+    return { ord: ord + other, ex };
+  }
+  function n65(S, t, aliveA, aliveB) {
+    let n = 0;
+    if (aliveA && S.ages0[0] + t >= 65) n++;
+    if (S.people.length > 1 && aliveB && S.ages0[1] + t >= 65) n++;
+    return n;
+  }
+  // ---------- IRA / RMDs ----------
+  const RMD_DIV = {72:27.4,73:26.5,74:25.5,75:24.6,76:23.7,77:22.9,78:22.0,79:21.1,80:20.2,81:19.4,82:18.5,83:17.7,84:16.8,85:16.0,86:15.2,87:14.4,88:13.7,89:12.9,90:12.2,91:11.5,92:10.8,93:10.1,94:9.5,95:8.9,96:8.4,97:7.8,98:7.3,99:6.8,100:6.4,101:6.0,102:5.6,103:5.2,104:4.9,105:4.6,106:4.3,107:4.1,108:3.9,109:3.7,110:3.5};
+  const rmdStartAge = by => by >= 1960 ? 75 : 73;
+  function rmdFor(age, startAge, bal) {
+    if (age < startAge || bal <= 0) return 0;
+    return bal / (RMD_DIV[Math.min(age, 110)] || 3.5);
+  }
+  const haircut = (S, inp, t) => (inp.cutPct > 0 && S.y0 + t >= inp.cutYear) ? 1 - inp.cutPct : 1;
+
+  // One year of household cash flow (real dollars in and out).
+  // value = SS + IRA withdrawal - extra tax they cause; IRA grows at the real return.
+  function yearStep(S, inp, t, status, ssReal, bal, alive, survivor) {
+    const aliveA = alive.indexOf(0) >= 0, aliveB = alive.indexOf(1) >= 0;
+    const inc = otherIncome(S, inp, t, aliveA, aliveB);
+    const owner = aliveA ? 0 : 1;
+    const scale = survivor ? inp.survivorIncomePct : 1;
+    const tb = bal.t, rb = bal.r;
+    let Wt = 0, Wr = 0, rmd = 0, wantT = 0;
+    if (tb > 0 || rb > 0) {
+      rmd = rmdFor(S.ages0[owner] + t, S.rmdAges[owner], tb);
+      let want = 0;
+      if (S.ages0[0] + t >= inp.otherStartAge)
+        want = inp.bridge ? Math.max(0, inp.bridgeTarget * scale - ssReal) : inp.iraPlanned * scale;
+      const wantR = want * inp.rothPct;
+      wantT = want - wantR;
+      Wr = Math.min(rb, wantR);
+      wantT += wantR - Wr;                       // Roth runs short: take the rest from Traditional
+      Wt = Math.min(tb, Math.max(rmd, wantT));
+      const shortT = Math.max(0, wantT - Wt);    // Traditional runs short: take the rest from Roth
+      if (shortT > 0) Wr = Math.min(rb, Wr + shortT);
+    }
+    const ri = S.realIdx(t), pi = S.paramIdx(t), yr = S.y0 + t, nOld = n65(S, t, aliveA, aliveB);
+    const ss = ssReal * ri, ord = inc.ord * ri, ex = inc.ex * ri, wN = Wt * ri;
+    const w = fedTax(status, ord + wN, ex, ss, nOld, yr, pi);
+    const wo = fedTax(status, ord, ex, 0, nOld, yr, pi);
+    const st = stateTaxOnSS({ state: inp.state, rate: inp.stateRate, status, agi: ord + wN + w.tss, tss: w.tss, ss, year: yr, idx: pi,
+      ages: alive.map(i => S.ages0[i] + t), fras: alive.map(i => S.fras[i]) });
+    const extra = (w.tax - wo.tax + st) / ri;
+    const g1 = 1 + inp.realReturn, nb = { t: (tb - Wt) * g1, r: (rb - Wr) * g1 };
+    return { cf: ssReal + Wt + Wr - extra, extra, W: Wt, Wr, rmdForced: rmd > 0.5 && rmd > wantT + 0.5, bal, newBal: nb,
+      term: nb.t * (1 - inp.heirTax) + nb.r, tssShare: ss > 0 ? w.tss / ss : 0 };
+  }
+
+  // Benefit of deceased used for survivor
+  function deceasedBenefit(S, i, c, own, dYear) {
+    const p = S.people[i], f = S.fras[i], ageD = S.ages0[i] + dYear;
+    if (ageD >= c) return Math.max(own.gross[dYear] || p.pia * 12 * own.factorAfter, 0.825 * p.pia * 12);
+    if (ageD >= f) return p.pia * 12 * ownFactor(Math.min(ageD, 70), f);
+    return p.pia * 12;
+  }
+
+  // Evaluate one strategy. dists = [{q,P},{q,P}]. With exact death ages, wantRows returns the year-by-year path.
+  function evaluate(S, inp, cA, cB, dists, wantRows) {
+    const T = S.T, disc = S.disc, g = 1 / (1 + inp.realReturn);
+    const oA = ownStream(S, 0, cA);
+    let ev = 0, leftover = 0;
+    const rows = wantRows ? [] : null;
+    const row = (t, ages, ss, withheld, y, note) => rows.push({ t, ages, ss, withheld, W: y.W, Wr: y.Wr, bal: y.bal.t, rbal: y.bal.r, extra: y.extra, net: y.cf, tssShare: y.tssShare,
+      note: [note, haircut(S, inp, t) < 1 && S.y0 + t === inp.cutYear ? 'benefit cut begins' : '', y.rmdForced ? 'RMD' : ''].filter(Boolean).join('; ') });
+    if (!inp.married) {
+      const { P, q } = dists[0];
+      let bal = { t: inp.iraBal, r: inp.rothBal };
+      for (let t = 0; t < T; t++) {
+        if (P[t] < 1e-7) break;
+        const ss = (oA.gross[t] - oA.withheld[t]) * haircut(S, inp, t);
+        const y = yearStep(S, inp, t, 'single', ss, bal, [0], false);
+        ev += disc[t] * (P[t] * y.cf + q[t] * g * y.term);
+        if (rows && P[t] === 1) { row(t, [S.ages0[0] + t], ss, oA.withheld[t], y, oA.withheld[t] > 0 ? 'earnings test' : ''); if (q[t] === 1) leftover = y.term; }
+        bal = y.newBal;
+      }
+      return { ev, rows, leftover };
+    }
+    const oB = ownStream(S, 1, cB);
+    const pA = inp.A.pia * 12, pB = inp.B.pia * 12;
+    const fA = S.fras[0], fB = S.fras[1];
+    const startA = Math.max(cA, cB - S.ages0[1] + S.ages0[0]);
+    const startB = Math.max(cB, cA - S.ages0[0] + S.ages0[1]);
+    const spA = Math.max(0, 0.5 * pB - pA) * spousalFactor(startA, fA);
+    const spB = Math.max(0, 0.5 * pA - pB) * spousalFactor(startB, fB);
+    const DA = dists[0], DB = dists[1];
+    // both alive
+    const endBal = new Array(T);
+    let bal = { t: inp.iraBal, r: inp.rothBal }, lastT = T;
+    for (let t = 0; t < T; t++) {
+      const pBoth = DA.P[t] * DB.P[t];
+      if (pBoth < 1e-9) { lastT = t; break; }
+      const ageA = S.ages0[0] + t, ageB = S.ages0[1] + t;
+      let ssA = oA.gross[t] - oA.withheld[t], ssB = oB.gross[t] - oB.withheld[t];
+      if (ageA >= cA && ageB >= cB) { ssA += spA; ssB += spB; }
+      const hc = haircut(S, inp, t), ss = (ssA + ssB) * hc;
+      const y = yearStep(S, inp, t, 'mfj', ss, bal, [0, 1], false);
+      ev += disc[t] * (pBoth * y.cf + DA.q[t] * DB.q[t] * g * y.term);
+      const wh = oA.withheld[t] + oB.withheld[t];
+      if (rows && pBoth === 1) { row(t, [ageA, ageB], ss, wh, y, wh > 0 ? 'earnings test' : ''); if (DA.q[t] === 1 && DB.q[t] === 1) leftover = y.term; }
+      endBal[t] = y.newBal; bal = y.newBal;
+    }
+    // one survivor
+    for (const who of [0, 1]) {
+      const Ds = who === 0 ? DA : DB, Do = who === 0 ? DB : DA;
+      const own = who === 0 ? oA : oB, c = who === 0 ? cA : cB;
+      const oj = who === 0 ? oB : oA, cj = who === 0 ? cB : cA;
+      for (let d = 0; d < Math.min(lastT, T - 1); d++) {
+        const qd = Do.q[d];
+        if (qd * Ds.P[d + 1] < 1e-9) continue;
+        const survAmt = deceasedBenefit(S, 1 - who, cj, oj, d) * survivorFactor(Math.max(60, S.ages0[who] + d + 1), S.fras[who]);
+        let b = endBal[d];
+        for (let t = d + 1; t < T; t++) {
+          const pr = Ds.P[t];
+          if (qd * pr < 1e-9) break;
+          const age = S.ages0[who] + t;
+          const ownNow = age >= c ? own.gross[t] - own.withheld[t] : 0;
+          const survNow = age >= 60 ? survAmt : 0; // survivor benefits can't start before 60
+          const ss = Math.max(ownNow, survNow) * haircut(S, inp, t);
+          const y = yearStep(S, inp, t, 'single', ss, b, [who], true);
+          ev += disc[t] * qd * (pr * y.cf + Ds.q[t] * g * y.term);
+          if (rows && qd === 1 && pr === 1) {
+            row(t, who === 0 ? [age, null] : [null, age], ss, 0, y, (ss <= 0 ? 'widowed; survivor benefit starts at 60' : survNow > ownNow ? 'survivor benefit' : 'own benefit') + (who === 0 ? ' (you)' : ' (spouse)'));
+            if (Ds.q[t] === 1) leftover = y.term;
+          }
+          b = y.newBal;
+        }
+      }
+    }
+    if (rows) rows.sort((x, y) => x.t - y.t);
+    return { ev, rows, spA, spB, leftover };
+  }
+
+  function claimRange(age0) { const r = []; for (let c = minClaim(age0); c <= 70; c++) r.push(c); return r; }
+
+  function run(inp) {
+    const S = setup(inp);
+    const dists = S.people.map((p, i) => deathDist(S.ages0[i], S.T, inp.mode, p.lifeExp));
+    const rA = claimRange(S.ages0[0]), rB = inp.married ? claimRange(S.ages0[1]) : [null];
+    const grid = [];
+    let best = null;
+    for (const cA of rA) for (const cB of rB) {
+      const { ev } = evaluate(S, inp, cA, cB, dists, false);
+      grid.push({ cA, cB, ev });
+      if (!best || ev > best.ev) best = { cA, cB, ev };
+    }
+    return { S, grid, best, rA, rB };
+  }
+  // value of a strategy with exact death ages
+  function exactValue(inp, S, cA, cB, dieA, dieB, rows) {
+    const dists = [deathDist(S.ages0[0], S.T, 'exact', dieA)];
+    if (inp.married) dists.push(deathDist(S.ages0[1], S.T, 'exact', dieB));
+    return evaluate(S, inp, cA, cB, dists, rows);
+  }
+
+  return { STATES, stateTaxOnSS, fra, fraLabel, ownFactor, spousalFactor, survivorFactor, fedTax, taxableSS, run, exactValue, setup, survivalProb, claimRange, minClaim };
+})();
+if (typeof module !== 'undefined') module.exports = SS;
+
+</script>
+<script data-keep>
+(() => {
+  const $ = id => document.getElementById(id);
+  const EXAMPLE = { married: true, 'a-by': 1965, 'a-pia': 2800, 'a-retire': 64, 'a-wages': 95000, 'a-life': 86,
+    'b-by': 1966, 'b-pia': 1200, 'b-retire': 63, 'b-wages': 45000, 'b-life': 89,
+    'other-inc': 5000, 'other-start': 64, 'exempt': 0, 'surv-pct': 80,
+    'ira-bal': 500000, 'roth-bal': 200000, 'ira-planned': 30000, 'roth-pct': 25, 'bridge': 'on', 'heir-tax': 24, 'cut-pct': 0, 'cut-year': 2033,
+    'real-return': 2, 'inflation': 2.5, 'mode': 'spread', 'state': 'PA', 'state-rate': 0 };
+  const FIELDS = Object.keys(EXAMPLE).filter(k => k !== 'married');
+  let FILE = { saved: false };
+  try { FILE = JSON.parse($('defaults').textContent) || FILE; } catch (e) {}
+  const DEFAULTS = FILE.saved && FILE.values ? Object.assign({}, EXAMPLE, FILE.values) : EXAMPLE;
+  const KEY = 'ss-claim-calc-v1' + (FILE.saved ? ':' + FILE.id : '');
+  let married = true, sel = null, lastKey = '';
+
+  const money = v => (v < 0 ? '−$' : '$') + Math.round(Math.abs(v)).toLocaleString('en-US');
+  const kfmt = v => { const a = Math.abs(v); const s = a >= 1e6 ? (a / 1e6).toFixed(2) + 'M' : a >= 1e3 ? Math.round(a / 1e3) + 'k' : Math.round(a); return (v < 0 ? '−$' : '$') + s; };
+
+  function load() {
+    let saved = null;
+    try { saved = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch (e) {}
+    apply(saved || DEFAULTS);
+    flags(!saved);
+  }
+  function flags(pristine) {
+    $('exflag').hidden = !(pristine && !FILE.saved);
+    $('savedflag').hidden = !FILE.saved;
+    if (FILE.saved) $('savedflag').textContent = `Saved scenario from ${FILE.date}. Changes you make are remembered in this browser; "Reset" returns to the saved numbers.`;
+  }
+  function apply(d) {
+    married = d.married !== false;
+    FIELDS.forEach(k => { if (d[k] !== undefined) $(k).value = d[k]; });
+    setHH();
+  }
+  function save() {
+    const d = { married }; FIELDS.forEach(k => d[k] = $(k).value);
+    try { localStorage.setItem(KEY, JSON.stringify(d)); } catch (e) {}
+  }
+  function setHH() {
+    $('hh-single').setAttribute('aria-pressed', String(!married));
+    $('hh-married').setAttribute('aria-pressed', String(married));
+    $('b-set').hidden = !married; $('surv-wrap').hidden = !married; $('sel-b-wrap').hidden = !married;
+  }
+  const num = (id, def) => { const v = parseFloat($(id).value); return isFinite(v) ? v : def; };
+
+  function readInputs() {
+    const now = new Date();
+    const year0 = now.getFullYear() + (now.getMonth() >= 9 ? 1 : 0); // plan starts next year late in the year
+    const person = p => ({ by: Math.round(num(p + '-by', 1965)), pia: Math.max(0, num(p + '-pia', 0)),
+      retireAge: num(p + '-retire', 65), wages: Math.max(0, num(p + '-wages', 0)), lifeExp: num(p + '-life', 85) });
+    return { married, year0, inflation: num('inflation', 2.5) / 100, realReturn: num('real-return', 2) / 100,
+      state: $('state').value, stateRate: $('state').value in SS.STATES || $('state').value === 'CUSTOM' ? num('state-rate', 0) / 100 : 0, survivorIncomePct: num('surv-pct', 100) / 100,
+      iraBal: Math.max(0, num('ira-bal', 0)), rothBal: Math.max(0, num('roth-bal', 0)), rothPct: Math.min(1, Math.max(0, num('roth-pct', 0) / 100)), iraPlanned: Math.max(0, num('ira-planned', 0)), bridge: $('bridge').value === 'on',
+      heirTax: Math.min(0.6, Math.max(0, num('heir-tax', 24) / 100)), cutPct: Math.min(0.6, Math.max(0, num('cut-pct', 0) / 100)), cutYear: Math.round(num('cut-year', 2033)),
+      otherIncome: Math.max(0, num('other-inc', 0)), otherStartAge: num('other-start', 65), exempt: Math.max(0, num('exempt', 0)),
+      mode: $('mode').value, A: person('a'), B: person('b') };
+  }
+
+  // ---------- render ----------
+  let R = null, inp = null;
+  function recompute() {
+    inp = readInputs();
+    const warn = [], bad = [];
+    const ageA = inp.year0 - inp.A.by, ageB = inp.year0 - inp.B.by;
+    const req = ['a-by', 'a-pia', 'a-life'].concat(married ? ['b-by', 'b-pia', 'b-life'] : []);
+    if (req.some(id => $(id).value.trim() === '')) bad.push('Fill in birth year, benefit and life expectancy' + (married ? ' for both of you.' : '.'));
+    if (ageA > 70 || (married && ageB > 70)) bad.push('This calculator is for people who have not yet reached 70.');
+    if (inp.A.lifeExp <= ageA) bad.push('Your life expectancy must be above your current age.');
+    if (married && inp.B.lifeExp <= ageB) bad.push('Your spouse\'s life expectancy must be above their current age.');
+    if (inp.A.lifeExp > 110 || (married && inp.B.lifeExp > 110)) bad.push('Life expectancy can be at most 110.');
+    if (!bad.length && inp.A.pia + (married ? inp.B.pia : 0) <= 0) bad.push('Enter a benefit at full retirement age (from your statement at ssa.gov).');
+    if (!bad.length && (ageA < 50 || (married && ageB < 50))) warn.push('Birth year looks far from retirement; results get less reliable.');
+    const all = bad.concat(warn);
+    $('warnings').hidden = !all.length; $('warnings').textContent = all.join(' ');
+    document.querySelector('main.results').classList.toggle('stale', bad.length > 0);
+    if (bad.length) {
+      $('verdict').textContent = 'Fix the entry noted below to see results.';
+      $('kpis').innerHTML = ''; $('flatness').textContent = '';
+      return;
+    }
+    inp.bridgeTarget = (inp.A.pia + (married ? inp.B.pia : 0)) * 12 + inp.iraPlanned;
+    $('bridge-note').textContent = inp.bridge ? `Keeps Social Security + account withdrawals at about ${money(inp.bridgeTarget)}/yr (both full-age benefits plus planned withdrawals) from age ${inp.otherStartAge}.` : '';
+    $('split-note').textContent = inp.iraBal + inp.rothBal > 0 ? `Each withdrawal: ${Math.round(inp.rothPct * 100)}% Roth (tax-free), ${100 - Math.round(inp.rothPct * 100)}% Traditional (taxable). Required minimums come from Traditional.` : '';
+    R = SS.run(inp);
+    const key = JSON.stringify(inp);
+    if (key !== lastKey) { sel = { cA: R.best.cA, cB: R.best.cB }; lastKey = key; }
+    renderFacts(); renderVerdict(); renderBenefits(); renderMap(); renderChart(); renderSelectors(); renderYears();
+  }
+
+  function renderFacts() {
+    const f = (p, el, age) => { const fr = SS.fra(p.by); $(el).textContent = `Age in ${inp.year0}: ${age} · Full retirement age: ${SS.fraLabel(fr)}`; };
+    f(inp.A, 'a-facts', inp.year0 - inp.A.by);
+    if (married) f(inp.B, 'b-facts', inp.year0 - inp.B.by);
+  }
+  const ev = (cA, cB) => R.grid.find(g => g.cA === cA && g.cB === cB);
+  const fraAge = by => Math.min(70, Math.max(62, Math.round(SS.fra(by))));
+  function clampC(c, age0) { return Math.min(70, Math.max(SS.minClaim(age0), c)); }
+
+  function renderVerdict() {
+    const b = R.best;
+    $('verdict').innerHTML = married
+      ? `You claim at <em>${b.cA}</em>, your spouse at <em>${b.cB}</em>.`
+      : `Claim at <em>${b.cA}</em>.`;
+    const a0 = R.S.ages0[0], b0 = married ? R.S.ages0[1] : 0;
+    const early = married ? ev(clampC(62, a0), clampC(62, b0)) : ev(clampC(62, a0), null);
+    const mid = married ? ev(clampC(fraAge(inp.A.by), a0), clampC(fraAge(inp.B.by), b0)) : ev(clampC(fraAge(inp.A.by), a0), null);
+    const k = [
+      [money(b.ev), inp.iraBal + inp.rothBal > 0 ? 'Lifetime value of Social Security + retirement accounts under the best plan (after tax, today\'s dollars)' : 'Lifetime value of the best plan (after tax, today\'s dollars)'],
+      [money(b.ev - early.ev), married ? `More than both claiming as early as possible (${early.cA}/${early.cB})` : `More than claiming at ${early.cA}`],
+      [money(b.ev - mid.ev), married ? `More than both claiming at about full retirement age (${mid.cA}/${mid.cB})` : `More than claiming at ${mid.cA}`]
+    ];
+    $('kpis').innerHTML = k.map(([v, l]) => `<div class="kpi"><div class="v">${v}</div><div class="l">${l}</div></div>`).join('');
+    const band = inp.iraBal + inp.rothBal > 0 ? 0.01 : 0.02;
+    const close = R.grid.filter(g => g.ev >= b.ev * (1 - band)).length;
+    $('flatness').textContent = close > 1
+      ? `${close - 1} other plan${close > 2 ? 's come' : ' comes'} within ${band * 100}% of the best. Differences that small are inside the uncertainty of any forecast, so pick among them on other grounds (health, cash needs, peace of mind).`
+      : 'The best plan stands out clearly from the alternatives.';
+  }
+
+  function renderBenefits() {
+    const people = married ? [['You', inp.A], ['Spouse', inp.B]] : [['You', inp.A]];
+    let h = '<thead><tr><th>Claim at</th>' + people.map(p => `<th>${p[0]}</th>`).join('') + '<th>% of full</th></tr></thead><tbody>';
+    for (let c = 62; c <= 70; c++) {
+      h += `<tr class="${Math.ceil(SS.fra(inp.A.by) - 1e-9) === c ? 'fra' : ''}"><td>${c}</td>` +
+        people.map(([, p]) => `<td>${money(p.pia * SS.ownFactor(c, SS.fra(p.by)))}</td>`).join('') +
+        `<td>${people.map(([, p]) => Math.round(SS.ownFactor(c, SS.fra(p.by)) * 1000) / 10 + '%').join(' / ')}</td></tr>`;
+    }
+    $('benefit-table').innerHTML = h + '</tbody>';
+    if (married) {
+      const sp = [[inp.B, inp.A, 'Your spouse'], [inp.A, inp.B, 'You']].filter(([x, y]) => 0.5 * y.pia > x.pia);
+      $('spousal-note').textContent = sp.length
+        ? sp.map(([x, y, n]) => `${n} also qualif${n === 'You' ? 'y' : 'ies'} for a spousal top-up of up to ${money(0.5 * y.pia - x.pia)}/mo once both of you have filed (reduced if taken before full retirement age).`).join(' ')
+        : 'Neither of you gets a spousal top-up, since each full benefit is more than half of the other\'s. The survivor still keeps the larger check.';
+    } else $('spousal-note').textContent = '';
+  }
+
+  function seqColor(t) { // t 0..1 -> interpolate between --seq-lo and --seq-hi
+    const cs = getComputedStyle(document.documentElement);
+    const p = h => { h = h.trim().replace('#', ''); return [0, 2, 4].map(i => parseInt(h.substr(i, 2), 16)); };
+    const lo = p(cs.getPropertyValue('--seq-lo')), hi = p(cs.getPropertyValue('--seq-hi'));
+    const c = lo.map((v, i) => Math.round(v + (hi[i] - v) * t));
+    const lum = (0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2]) / 255;
+    return { bg: `rgb(${c.join(',')})`, fg: lum > 0.55 ? '#0d1b2a' : '#ffffff' };
+  }
+
+  function renderMap() {
+    const b = R.best, vals = R.grid.map(g => g.ev), lo = Math.min(...vals), hi = b.ev;
+    if (!married) {
+      $('map-title').textContent = 'Every claiming age compared';
+      $('map-sub').textContent = 'Lifetime after-tax value of each claiming age. Click a bar to see its year-by-year detail.';
+      $('map').innerHTML = '<div class="bars">' + R.grid.map(g => {
+        const w = hi > 0 ? Math.max(2, (g.ev - lo * 0.9) / (hi - lo * 0.9) * 100) : 0;
+        return `<button type="button" class="bar ${g.cA === b.cA ? 'best' : ''} ${g.cA === sel.cA ? 'sel' : ''}" data-a="${g.cA}" aria-label="Claim at ${g.cA}: ${money(g.ev)}">
+          <span class="lab">${g.cA}</span><span class="track"><span class="fill" style="width:${w}%;display:block"></span></span><span class="val">${kfmt(g.ev)}</span></button>`;
+      }).join('') + '</div>';
+      $('map-cap').innerHTML = `<span>Bars start at 90% of the lowest value so differences are visible.</span><span>Green bar: best.</span>`;
+    } else {
+      $('map-title').textContent = 'Every claiming plan compared';
+      $('map-sub').textContent = 'Each cell is a pair of claiming ages, showing how far it falls short of the best plan in lifetime after-tax value. Click a cell to see its year-by-year detail.';
+      const cols = R.rB.length;
+      let h = `<div class="hm" style="grid-template-columns: 64px repeat(${cols}, minmax(44px, 1fr))"><div class="axis" style="font-size:10.5px">You ↓ Spouse →</div>`;
+      R.rB.forEach(c => h += `<div class="axis">${c}</div>`);
+      R.rA.forEach(cA => {
+        h += `<div class="axis">${cA}</div>`;
+        R.rB.forEach(cB => {
+          const g = ev(cA, cB), t = hi > lo ? (g.ev - lo) / (hi - lo) : 1, col = seqColor(t);
+          const isBest = cA === b.cA && cB === b.cB, isSel = cA === sel.cA && cB === sel.cB;
+          const lab = isBest ? 'Best' : '−' + kfmt(b.ev - g.ev).replace('$', '$');
+          h += `<button type="button" class="cell ${isBest ? 'best' : ''} ${isSel ? 'sel' : ''}" data-a="${cA}" data-b="${cB}" style="background:${col.bg};color:${col.fg}" title="You ${cA}, spouse ${cB}: ${money(g.ev)}" aria-label="You ${cA}, spouse ${cB}: ${money(g.ev)}">${lab}</button>`;
+        });
+      });
+      $('map').innerHTML = h + '</div>';
+      $('map-cap').innerHTML = `<span>Lower value <span class="ramp"></span> higher value</span><span>Ringed: best · Orange outline: shown below</span>`;
+    }
+    $('map').querySelectorAll('[data-a]').forEach(el => el.addEventListener('click', () => {
+      sel = { cA: +el.dataset.a, cB: married ? +el.dataset.b : null };
+      renderMap(); renderChart(); renderSelectors(); renderYears();
+    }));
+  }
+
+  function strategies() {
+    const a0 = R.S.ages0[0], b0 = married ? R.S.ages0[1] : 0;
+    const list = [];
+    const add = (cA, cB, name, color) => { if (!list.some(s => s.cA === cA && s.cB === cB)) list.push({ cA, cB, name, color }); };
+    const e = clampC(62, a0), eb = married ? clampC(62, b0) : null;
+    const m = clampC(fraAge(inp.A.by), a0), mb = married ? clampC(fraAge(inp.B.by), b0) : null;
+    add(sel.cA, sel.cB, married ? `Selected (${sel.cA}/${sel.cB})` : `Selected (${sel.cA})`, 'var(--s2)');
+    add(e, eb, married ? `Both early (${e}/${eb})` : `Claim at ${e}`, 'var(--s1)');
+    add(m, mb, married ? `Both at full age (${m}/${mb})` : `Claim at ${m}`, 'var(--s3)');
+    add(70, married ? 70 : null, married ? 'Both at 70' : 'Claim at 70', 'var(--s4)');
+    return list;
+  }
+
+  function renderChart() {
+    const a0 = R.S.ages0[0];
+    const xs = []; for (let d = Math.max(a0 + 1, 64); d <= 100; d++) xs.push(d);
+    const strats = strategies();
+    strats.forEach(s => s.ys = xs.map(d => SS.exactValue(inp, R.S, s.cA, s.cB, d, inp.B.lifeExp, false).ev));
+    $('chart-sub').textContent = married
+      ? `Lifetime after-tax value if you die at each age shown, with your spouse living to ${inp.B.lifeExp}. The orange line is the plan selected in the grid above.`
+      : 'Lifetime after-tax value if you die at each age shown. The orange line is the claiming age selected above.';
+    $('legend').innerHTML = strats.map(s => `<span><i style="background:${s.color}"></i>${s.name}</span>`).join('');
+
+    const W = Math.max(320, Math.round($('chart').clientWidth || 720)), H = W < 560 ? 260 : 300, m = { l: 58, r: 14, t: 10, b: 34 };
+    const all = strats.flatMap(s => s.ys), lo0 = Math.min(...all), hi0 = Math.max(...all), st0 = niceStep(hi0 - lo0 || 1, 5);
+    const ymin = lo0 > 0 ? Math.max(0, Math.floor((lo0 - (hi0 - lo0) * 0.08) / st0) * st0) : lo0, ymax = hi0 + (hi0 - ymin) * 0.04;
+    const x = d => m.l + (d - xs[0]) / (xs[xs.length - 1] - xs[0]) * (W - m.l - m.r);
+    const y = v => H - m.b - (v - ymin) / (ymax - ymin) * (H - m.t - m.b);
+    const step = niceStep(ymax - ymin, 5);
+    let g = '';
+    for (let v = Math.ceil(ymin / step) * step; v <= ymax; v += step) {
+      g += `<line x1="${m.l}" x2="${W - m.r}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)" stroke-width="1"/>`;
+      g += `<text x="${m.l - 8}" y="${y(v) + 4}" text-anchor="end">${kfmt(v)}</text>`;
+    }
+    for (let d = Math.ceil(xs[0] / 5) * 5; d <= 100; d += (W < 560 ? 10 : 5)) g += `<text x="${x(d)}" y="${H - m.b + 18}" text-anchor="middle">${d}</text>`;
+    g += `<text x="${(m.l + W - m.r) / 2}" y="${H - 2}" text-anchor="middle">Your age at death</text>`;
+    // expected-age marker
+    if (inp.A.lifeExp >= xs[0] && inp.A.lifeExp <= 100) g += `<line x1="${x(inp.A.lifeExp)}" x2="${x(inp.A.lifeExp)}" y1="${m.t}" y2="${H - m.b}" stroke="var(--muted)" stroke-dasharray="3 4" stroke-width="1"/><text x="${x(inp.A.lifeExp) + 5}" y="${m.t + 10}" text-anchor="start">your guess</text>`;
+    const paths = strats.slice().reverse().map(s => `<path d="${s.ys.map((v, i) => (i ? 'L' : 'M') + x(xs[i]).toFixed(1) + ' ' + y(v).toFixed(1)).join(' ')}" fill="none" stroke="${s.color}" stroke-width="${s === strats[0] ? 2.5 : 2}" stroke-linejoin="round" stroke-linecap="round"/>`).join('');
+    $('chart').innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Lifetime value by age at death">${g}${paths}<line id="xh" y1="${m.t}" y2="${H - m.b}" stroke="var(--ink)" stroke-width="1" opacity="0"/><g id="dots"></g><rect x="${m.l}" y="${m.t}" width="${W - m.l - m.r}" height="${H - m.t - m.b}" fill="transparent" id="hit"/></svg><div class="tip" id="tip" hidden></div>`;
+    const svg = $('chart').querySelector('svg'), tip = $('tip');
+    const move = ev => {
+      const r = svg.getBoundingClientRect(), px = (ev.clientX - r.left) / r.width * W;
+      let i = Math.round((px - m.l) / (W - m.l - m.r) * (xs.length - 1)); i = Math.max(0, Math.min(xs.length - 1, i));
+      const X = x(xs[i]);
+      $('xh').setAttribute('x1', X); $('xh').setAttribute('x2', X); $('xh').setAttribute('opacity', .35);
+      $('dots').innerHTML = strats.map(s => `<circle cx="${X}" cy="${y(s.ys[i])}" r="4.5" fill="${s.color}" stroke="var(--surface)" stroke-width="2"/>`).join('');
+      tip.hidden = false;
+      tip.innerHTML = `<b>Die at ${xs[i]}</b>` + strats.slice().sort((a, b) => b.ys[i] - a.ys[i]).map(s => `<div class="r"><span><i style="background:${s.color}"></i>${s.name}</span><span>${kfmt(s.ys[i])}</span></div>`).join('');
+      const left = X / W * r.width; tip.style.top = '10px';
+      tip.style.left = (left > r.width / 2 ? left - tip.offsetWidth - 14 : left + 14) + 'px';
+    };
+    $('hit').addEventListener('pointermove', move);
+    $('hit').addEventListener('pointerleave', () => { tip.hidden = true; $('xh').setAttribute('opacity', 0); $('dots').innerHTML = ''; });
+
+    // break-even between earliest plan and selected (or both-70)
+    const e0 = clampC(62, a0), eb0 = married ? clampC(62, R.S.ages0[1]) : null;
+    const getS = (cA, cB) => strats.find(s => s.cA === cA && s.cB === cB);
+    const early = getS(e0, eb0);
+    let later = (sel.cA === e0 && sel.cB === eb0) ? getS(70, married ? 70 : null) : getS(sel.cA, sel.cB);
+    if (!later) later = early;
+    let be = null;
+    for (let i = 1; i < xs.length; i++) {
+      const d0 = later.ys[i - 1] - early.ys[i - 1], d1 = later.ys[i] - early.ys[i];
+      if (d0 < 0 && d1 >= 0) { be = xs[i - 1] + (-d0) / (d1 - d0); break; }
+    }
+    const label = s => married ? `${s.cA}/${s.cB}` : `${s.cA}`;
+    if (later === early) $('breakeven').textContent = '';
+    else if (be) {
+      const p = SS.survivalProb(a0, inp.A.lifeExp, be);
+      $('breakeven').textContent = `Claiming at ${label(later)} instead of ${label(early)} comes out ahead if you live past about ${be.toFixed(1)}. With a life expectancy of ${inp.A.lifeExp}, the chance of that is roughly ${Math.round(p * 100)}%.` + (married ? ' For couples, the later-claiming spouse\'s higher check also continues as the survivor benefit, which pushes the balance toward delay.' : '');
+    } else {
+      const ahead = later.ys[later.ys.length - 1] > early.ys[early.ys.length - 1];
+      $('breakeven').textContent = ahead ? `Claiming at ${label(later)} beats ${label(early)} at every age shown.` : `Claiming at ${label(later)} does not catch up with ${label(early)} by age 100 under these assumptions.`;
+    }
+  }
+  function niceStep(range, n) { const r = range / n, p = Math.pow(10, Math.floor(Math.log10(r))), f = r / p; return (f < 1.5 ? 1 : f < 3 ? 2 : f < 7 ? 5 : 10) * p; }
+
+  function renderSelectors() {
+    const opts = (rng, v) => rng.map(c => `<option value="${c}" ${c === v ? 'selected' : ''}>${c}</option>`).join('');
+    $('sel-a').innerHTML = opts(R.rA, sel.cA);
+    if (married) $('sel-b').innerHTML = opts(R.rB, sel.cB);
+  }
+  function renderYears() {
+    const res = SS.exactValue(inp, R.S, sel.cA, sel.cB, inp.A.lifeExp, inp.B.lifeExp, true);
+    const hasIra = inp.iraBal + inp.rothBal > 0;
+    $('yt-sub').textContent = (married ? `You claim at ${sel.cA}, your spouse at ${sel.cB}; you live to ${inp.A.lifeExp} and your spouse to ${inp.B.lifeExp}. ` : `Claiming at ${sel.cA} and living to ${inp.A.lifeExp}. `) + 'Today\'s dollars. "Tax" is the federal and state income tax caused by Social Security' + (hasIra ? ' and Traditional withdrawals. "Kept" includes Roth withdrawals.' : '.');
+    const accCols = '<th>Traditional out</th><th>Roth out</th><th>Traditional bal.</th><th>Roth bal.</th>';
+    let h = `<thead><tr><th>Year</th><th>Age${married ? 's' : ''}</th><th>Benefits</th><th>Withheld</th><th>Taxable share</th>${hasIra ? accCols : ''}<th>Tax</th><th>Kept</th><th>Note</th></tr></thead><tbody>`;
+    let tot = { ss: 0, x: 0, n: 0, w: 0, wr: 0 };
+    const opt = v => v > 0.5 ? money(v) : '';
+    res.rows.forEach(r => {
+      const ages = married ? r.ages.map(a => a == null ? '—' : a).join(' / ') : r.ages[0];
+      tot.ss += r.ss; tot.x += r.extra; tot.n += r.net; tot.w += r.W; tot.wr += r.Wr;
+      h += `<tr><td>${inp.year0 + r.t}</td><td>${ages}</td><td>${money(r.ss)}</td><td>${opt(r.withheld)}</td><td>${r.ss > 0 ? Math.round(r.tssShare * 100) + '%' : ''}</td>${hasIra ? `<td>${opt(r.W)}</td><td>${opt(r.Wr)}</td><td>${money(r.bal)}</td><td>${money(r.rbal)}</td>` : ''}<td>${opt(r.extra)}</td><td>${money(r.net)}</td><td class="txt">${r.note || ''}</td></tr>`;
+    });
+    h += `<tr><td><b>Total</b></td><td></td><td><b>${money(tot.ss)}</b></td><td></td><td></td>${hasIra ? `<td><b>${money(tot.w)}</b></td><td><b>${money(tot.wr)}</b></td><td></td><td></td>` : ''}<td><b>${money(tot.x)}</b></td><td><b>${money(tot.n)}</b></td><td class="txt">${hasIra ? `Left to heirs after their tax: ${money(res.leftover)}` : (tot.ss > 0 ? Math.round(tot.x / tot.ss * 100) + '% of benefits lost to tax' : '')}</td></tr>`;
+    $('year-table').innerHTML = h + '</tbody>';
+  }
+
+  // ---------- wiring ----------
+  let timer = null;
+  const schedule = () => { clearTimeout(timer); timer = setTimeout(() => { save(); $('exflag').hidden = true; recompute(); }, 180); };
+  FIELDS.forEach(k => $(k).addEventListener('input', schedule));
+  $('hh-single').addEventListener('click', () => { married = false; setHH(); schedule(); });
+  $('hh-married').addEventListener('click', () => { married = true; setHH(); schedule(); });
+  $('reset').addEventListener('click', () => { try { localStorage.removeItem(KEY); } catch (e) {} apply(DEFAULTS); stateUI(false); flags(true); lastKey = ''; recompute(); });
+  if (FILE.saved) $('reset').textContent = 'Reset to saved numbers';
+
+  // ----- state selector -----
+  function stateUI(fill) {
+    const st = $('state').value, info = SS.STATES[st], rate = $('state-rate');
+    const taxes = !!info || st === 'CUSTOM';
+    rate.disabled = !taxes;
+    if (!taxes) { rate.value = 0; $('state-note').textContent = st === 'WV' ? 'West Virginia fully exempts Social Security from 2026.' : 'This state does not tax Social Security benefits.'; return; }
+    if (fill && info) rate.value = info.rate;
+    $('state-note').textContent = info ? info.rule + ' Rate pre-filled with a typical middle-income rate; change it to match your bracket.' : 'Your rate is applied to the federally taxable part of your benefits.';
+  }
+  $('state').addEventListener('change', () => { stateUI(true); schedule(); });
+  $('bridge').addEventListener('change', schedule);
+  $('cut-preset').addEventListener('click', () => { $('cut-pct').value = 22; $('cut-year').value = 2033; schedule(); });
+
+  // ----- save as a standalone HTML file -----
+  function buildFile() {
+    const d = { married }; FIELDS.forEach(k => d[k] = $(k).value);
+    const now = new Date();
+    const meta = { saved: true, id: FILE.id || Math.random().toString(36).slice(2, 10), date: now.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }), values: d };
+    const root = document.documentElement.cloneNode(true);
+    root.querySelectorAll('script:not([data-keep])').forEach(n => n.remove());
+    root.querySelector('#defaults').textContent = JSON.stringify(meta).replace(/</g, '\\u003c');
+    ['#verdict', '#kpis', '#benefit-table', '#map', '#chart', '#legend', '#year-table'].forEach(sel => { const n = root.querySelector(sel); if (n) n.innerHTML = ''; });
+    root.removeAttribute('data-theme');
+    return '<!doctype html>\n' + root.outerHTML;
+  }
+  const fname = () => 'social-security-plan-' + new Date().toISOString().slice(0, 10) + '.html';
+  let downloads = null;
+  const msg = t => { $('save-msg').textContent = t; };
+  if (window.claude && typeof window.claude.use === 'function') {
+    window.claude.use('downloads').then(d => { downloads = d; $('save').hidden = !d; }).catch(() => {});
+  } else {
+    $('save').hidden = false; // opened as a local file: plain browser download works
+  }
+  $('save').addEventListener('click', async () => {
+    const html = buildFile();
+    if (downloads) {
+      try { await downloads.save({ filename: fname(), data: html }); msg('Saved. Open the file in any browser to pick up where you left off.'); }
+      catch (e) { msg(e && e.code === 'declined' ? 'Save cancelled.' : 'Saving is not available here.'); }
+    } else {
+      try {
+        const url = URL.createObjectURL(new Blob([html], { type: 'text/html' }));
+        const a = document.createElement('a'); a.href = url; a.download = fname(); document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 2000); msg('Saved to your downloads folder.');
+      } catch (e) { msg('Saving is not available here.'); }
+    }
+  });
+  $('sel-a').addEventListener('change', e => { sel.cA = +e.target.value; renderMap(); renderChart(); renderYears(); });
+  $('sel-b').addEventListener('change', e => { sel.cB = +e.target.value; renderMap(); renderChart(); renderYears(); });
+  const mq = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)');
+  if (mq && mq.addEventListener) mq.addEventListener('change', () => R && renderMap());
+  new MutationObserver(() => R && renderMap()).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+  let rz = null; window.addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(() => R && renderChart(), 200); });
+  // ----- conversation transcript -----
+  function md(src) {
+    const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    const inline = s => esc(s)
+      .replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>')
+      .replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>').replace(/`([^`]+)`/g, '<code>$1</code>');
+    const out = []; let list = null;
+    const close = () => { if (list) { out.push(`<${list.t}>${list.items.map(i => `<li>${i}</li>`).join('')}</${list.t}>`); list = null; } };
+    src.split(/\n/).forEach(line => {
+      const ul = line.match(/^\s*[-*] (.*)/), ol = line.match(/^\s*\d+\. (.*)/);
+      if (ul || ol) {
+        const t = ul ? 'ul' : 'ol';
+        if (!list || list.t !== t) { close(); list = { t, items: [] }; }
+        list.items.push(inline((ul || ol)[1]));
+      } else if (!line.trim()) close();
+      else if (list && /^\s{2,}/.test(line)) list.items[list.items.length - 1] += ' ' + inline(line.trim());
+      else { close(); out.push(`<p>${inline(line.replace(/^#+\s*/, ''))}</p>`); }
+    });
+    close();
+    return out.join('');
+  }
+  try {
+    const chat = JSON.parse($('transcript').textContent);
+    $('chat').innerHTML = chat.map(m => `<div class="msg ${m.role}"><div class="who">${m.role === 'you' ? 'Question' : 'Claude'}</div>${md(m.text)}</div>`).join('');
+  } catch (e) { $('convo').hidden = true; }
+
+  load(); stateUI(false); recompute();
+})();
+
+</script>
+</body></html>
